@@ -3,6 +3,7 @@ import time
 from requests import get
 from bs4 import BeautifulSoup
 import csv
+from datetime import datetime
 
 # p = sync_playwright().start()
 
@@ -19,33 +20,33 @@ import csv
 # p.stop()
 
 
-from tkinter import *            # tkinter 라이브러리에 모든 함수를 사용하겠다.
-root = Tk()                      # root라는 창을 생성
-root.geometry("600x400")       # 창 크기설정
-root.title("yeachan_yeachan")    # 창 제목설정
-root.option_add("*Font","맑은고딕 25") # 폰트설정
-root.resizable(False, False)  # x, y 창 크기 변경 불가
+# from tkinter import *            # tkinter 라이브러리에 모든 함수를 사용하겠다.
+# root = Tk()                      # root라는 창을 생성
+# root.geometry("600x400")       # 창 크기설정
+# root.title("yeachan_yeachan")    # 창 제목설정
+# root.option_add("*Font","맑은고딕 25") # 폰트설정
+# root.resizable(False, False)  # x, y 창 크기 변경 불가
 
-count = 0                    # 변수 생성
+# count = 0                    # 변수 생성
 
-def btnpress():              # 함수 btnpress() 정의
-    global count             
-    count += 1
-    btn.config(text = count)
+# def btnpress():              # 함수 btnpress() 정의
+#     global count             
+#     count += 1
+#     btn.config(text = count)
 
-btn = Button(root)           # root라는 창에 버튼 생성
-btn.config(text=count)       # 버튼 내용
-btn.config(width=10)         # 버튼 크기
-btn.config(command=btnpress) # 버튼 기능 (btnpress() 함수 호출)
-btn.pack()                   # 버튼 배치
+# btn = Button(root)           # root라는 창에 버튼 생성
+# btn.config(text=count)       # 버튼 내용
+# btn.config(width=10)         # 버튼 크기
+# btn.config(command=btnpress) # 버튼 기능 (btnpress() 함수 호출)
+# btn.pack()                   # 버튼 배치
 
-root.mainloop()              # 창 실행
+# root.mainloop()              # 창 실행
 
 
 
 baseURL = get("https://www.oliveyoung.co.kr/store/main/getBestList.do?t_page=%ED%99%88&t_click=GNB&t_gnb_type=%EB%9E%AD%ED%82%B9&t_swiping_type=N")
 
-def function():
+def web_scraper():
     soup = BeautifulSoup(baseURL.text, "html.parser")
     cats = soup.select(".common-menu li")
 
@@ -73,7 +74,6 @@ def function():
                 rank = num
                 brand = prod.find("span", class_="tx_brand").text
                 prod_name = prod.find("p", class_="tx_name").text
-                category = prod.find("button", class_="cartBtn")["data-ref-goodscategory"]
                 link = prod.find('a')['href']
                 num = num + 1
                 prod = {
@@ -81,7 +81,6 @@ def function():
                     "순위": rank,
                     "브랜드명": brand,
                     "상품명": prod_name,
-                    "제품 카테고리": category,
                     "링크": link
                 }
                 prods_db.append(prod)
@@ -92,9 +91,13 @@ def function():
 
     file = open("oy_prods.csv", "w")
     writer = csv.writer(file)
+    today = datetime.today().strftime("%Y/%m/%d")
     
     writer.writerow([f"{today} 올리브영 랭킹"])
-    writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "제품 카테고리", "링크"])
+    writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크"])
 
     for prod in prods_db:
         writer.writerow(prod.values())
+    file.close()
+
+web_scraper()
