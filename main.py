@@ -46,58 +46,55 @@ from datetime import datetime
 
 baseURL = get("https://www.oliveyoung.co.kr/store/main/getBestList.do?t_page=%ED%99%88&t_click=GNB&t_gnb_type=%EB%9E%AD%ED%82%B9&t_swiping_type=N")
 
-def web_scraper():
-    soup = BeautifulSoup(baseURL.text, "html.parser")
-    cats = soup.select(".common-menu li")
+soup = BeautifulSoup(baseURL.text, "html.parser")
+cats = soup.select(".common-menu li")
 
-    prods_db = []
+prods_db = []
 
-    for cat in cats:
-        if cat.find("button"):
-            num = 1
-            catNo = cat.find("button")["data-ref-dispcatno"]
-            catName = cat.find("button").text
-            print(catNo)
-            resultURL = get(f"https://www.oliveyoung.co.kr/store/main/getBestList.do?dispCatNo=900000100100001&fltDispCatNo={catNo}&pageIdx=1&rowsPerPage=8&t_page=랭킹&t_click=판매랭킹_{catName}")
+for cat in cats:
+    if cat.find("button"):
+        num = 1
+        catNo = cat.find("button")["data-ref-dispcatno"]
+        catName = cat.find("button").text
+        resultURL = get(f"https://www.oliveyoung.co.kr/store/main/getBestList.do?dispCatNo=900000100100001&fltDispCatNo={catNo}&pageIdx=1&rowsPerPage=8&t_page=랭킹&t_click=판매랭킹_{catName}")
 
-            # p2 = sync_playwright().start()
-            # broswer = p2.chromium.launch()
-            # page = broswer.new_page()   
-            # page.goto(resultURL)
-            # time.sleep(3)
-            # content = page.content()
+        # p2 = sync_playwright().start()
+        # broswer = p2.chromium.launch()
+        # page = broswer.new_page()   
+        # page.goto(resultURL)
+        # time.sleep(3)
+        # content = page.content()
 
-            resultSoup = BeautifulSoup(resultURL.text, "html.parser")
-            prods = resultSoup.find_all("div", class_="prd_info")
+        resultSoup = BeautifulSoup(resultURL.text, "html.parser")
+        prods = resultSoup.find_all("div", class_="prd_info")
 
-            for prod in prods:
-                rank = num
-                brand = prod.find("span", class_="tx_brand").text
-                prod_name = prod.find("p", class_="tx_name").text
-                link = prod.find('a')['href']
-                num = num + 1
-                prod = {
-                    "랭킹 카테고리": catName,
-                    "순위": rank,
-                    "브랜드명": brand,
-                    "상품명": prod_name,
-                    "링크": link
-                }
-                prods_db.append(prod)
-            else:
-                print("over")
+        for prod in prods:
+            rank = num
+            brand = prod.find("span", class_="tx_brand").text
+            prod_name = prod.find("p", class_="tx_name").text
+            link = prod.find('a')['href']
+            num = num + 1
+            prod = {
+                "랭킹 카테고리": catName,
+                "순위": rank,
+                "브랜드명": brand,
+                "상품명": prod_name,
+                "링크": link
+            }
+            prods_db.append(prod)
+        else:
+            print("over")
 
-    # p.stop()
+# p.stop()
+        
+today = datetime.today().strftime("%Y/%m/%d %H:%M:%S")
+file = open("_oy_prods.csv", "w")
+writer = csv.writer(file)
 
-    file = open("oy_prods.csv", "w")
-    writer = csv.writer(file)
-    today = datetime.today().strftime("%Y/%m/%d")
-    
-    writer.writerow([f"{today} 올리브영 랭킹"])
-    writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크"])
+writer.writerow([f"{today} 올리브영 랭킹"])
+writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크"])
 
-    for prod in prods_db:
-        writer.writerow(prod.values())
-    file.close()
+for prod in prods_db:
+    writer.writerow(prod.values())
+file.close()
 
-web_scraper()
