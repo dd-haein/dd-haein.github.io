@@ -4,6 +4,7 @@ from requests import get
 from bs4 import BeautifulSoup
 import csv
 from datetime import datetime
+import pandas as pd
 
 # p = sync_playwright().start()
 
@@ -85,17 +86,20 @@ for cat in cats:
             }
             prods_db.append(prod)
         else:
-            print("over")
+            print(".")
 
         
-today = datetime.today().strftime("%Y/%m/%d %H:%M:%S")
-file = open("_oy_prods.csv", "w")
-writer = csv.writer(file)
+today = datetime.today().strftime("%Y-%m-%d (%H:%M:%S)")
+# file = open("_oy_prods.csv", "w")
+# writer = csv.writer(file)
 
-writer.writerow([f"{today} 올리브영 랭킹"])
-writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크", "카테고리"])
+df = pd.DataFrame.from_records(prods_db)
+df.to_csv("./results/"+today+".csv", index = False)
 
-for prod in prods_db:
-    writer.writerow(prod.values())
-file.close()
+# writer.writerow([f"{today} 올리브영 랭킹"])
+# writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크", "카테고리"])
+
+# for prod in prods_db:
+#     writer.writerow(prod.values())
+# file.close()
 
