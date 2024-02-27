@@ -73,26 +73,27 @@ for cat in cats:
             brand = prod.find("span", class_="tx_brand").text
             prod_name = prod.find("p", class_="tx_name").text
             link = prod.find('a')['href']
+            category = prod.find("button", class_="cartBtn")['data-ref-goodscategory']
             num = num + 1
             prod = {
                 "랭킹 카테고리": catName,
                 "순위": rank,
                 "브랜드명": brand,
                 "상품명": prod_name,
-                "링크": link
+                "링크": link,
+                "카테고리": category
             }
             prods_db.append(prod)
         else:
             print("over")
 
-# p.stop()
         
 today = datetime.today().strftime("%Y/%m/%d %H:%M:%S")
 file = open("_oy_prods.csv", "w")
 writer = csv.writer(file)
 
 writer.writerow([f"{today} 올리브영 랭킹"])
-writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크"])
+writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크", "카테고리"])
 
 for prod in prods_db:
     writer.writerow(prod.values())
