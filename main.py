@@ -91,7 +91,7 @@ for cat in cats:
             print(".")
 
         
-today = datetime.today().strftime("%Y-%m-%d (%H:%M:%S)")
+today = datetime.now(timezone('Asia/Seoul')).strftime("%Y-%m-%d (%H:%M:%S)")
 # file = open("_oy_prods.csv", "w")
 # writer = csv.writer(file)
 
