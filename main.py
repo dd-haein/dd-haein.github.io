@@ -1,12 +1,9 @@
 from requests import get
 from bs4 import BeautifulSoup
 from datetime import datetime
+from pytz import timezone
 from playwright.sync_api import sync_playwright
 import pandas as pd
-import os
-import sys
-import csv
-
 # p = sync_playwright().start()
 
 # broswer = p.chromium.launch()
