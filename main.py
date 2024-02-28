@@ -47,7 +47,6 @@ baseURL = get("https://www.oliveyoung.co.kr/store/main/getBestList.do?t_page=%ED
 
 soup = BeautifulSoup(baseURL.text, "html.parser")
 cats = soup.select(".common-menu li")
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 prods_db = []
 
