@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 import pandas as pd
+import os
+import sys
+import csv
 
 # p = sync_playwright().start()
 
@@ -47,6 +50,7 @@ baseURL = get("https://www.oliveyoung.co.kr/store/main/getBestList.do?t_page=%ED
 
 soup = BeautifulSoup(baseURL.text, "html.parser")
 cats = soup.select(".common-menu li")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 prods_db = []
 
@@ -92,7 +96,7 @@ today = datetime.today().strftime("%Y-%m-%d (%H:%M:%S)")
 # writer = csv.writer(file)
 
 df = pd.DataFrame.from_records(prods_db)
-df.to_csv("./results/"+today+".csv", index = False)
+df.to_csv(today+".csv", index = False)
 
 # writer.writerow([f"{today} 올리브영 랭킹"])
 # writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크", "카테고리"])
