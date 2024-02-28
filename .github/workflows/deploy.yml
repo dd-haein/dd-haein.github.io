@@ -32,7 +32,7 @@ jobs:
     - name: Commit files
       id: commit
       run: |
-        git config --local user.email "action@github.com"
+        git config --local user.email "hairen.san@gmail.com"
         git config --local user.name "github-actions"
         git add --all
         if [-z "$(git status --porcelain)"]; then
