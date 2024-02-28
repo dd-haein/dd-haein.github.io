@@ -1,7 +1,7 @@
-from playwright.sync_api import sync_playwright
 from requests import get
 from bs4 import BeautifulSoup
 from datetime import datetime
+from playwright.sync_api import sync_playwright
 import pandas as pd
 
 # p = sync_playwright().start()
