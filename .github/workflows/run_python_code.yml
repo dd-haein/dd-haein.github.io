@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install bs4 requests datetime playwright pandas
+        pip install bs4 requests datetime pytz playwright pandas
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: run
       run: |
