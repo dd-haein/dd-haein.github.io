@@ -76,12 +76,11 @@ for cat in cats:
             # category = prod.find("button", class_="cartBtn")['data-ref-goodscategory']
             num = num + 1
             prod = {
-                "일시": today,
                 "랭킹 카테고리": catName,
                 "순위": rank,
                 "브랜드명": brand,
                 "상품명": prod_name,
-                # "링크": link,
+                "링크": link,
                 # "카테고리": category
             }
             prods_db.append(prod)
