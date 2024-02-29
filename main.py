@@ -49,6 +49,7 @@ soup = BeautifulSoup(baseURL.text, "html.parser")
 cats = soup.select(".common-menu li")
 
 prods_db = []
+today = datetime.now(timezone('Asia/Seoul')).strftime("%Y/%m/%d %H:00")
 
 for cat in cats:
     if cat.find("button"):
@@ -75,11 +76,12 @@ for cat in cats:
             # category = prod.find("button", class_="cartBtn")['data-ref-goodscategory']
             num = num + 1
             prod = {
+                "일시": today,
                 "랭킹 카테고리": catName,
                 "순위": rank,
                 "브랜드명": brand,
                 "상품명": prod_name,
-                "링크": link,
+                # "링크": link,
                 # "카테고리": category
             }
             prods_db.append(prod)
@@ -87,7 +89,6 @@ for cat in cats:
             print(".")
 
         
-today = datetime.now(timezone('Asia/Seoul')).strftime("%Y-%m-%d (%H:%M:%S)")
 # file = open("_oy_prods.csv", "w")
 # writer = csv.writer(file)
 
