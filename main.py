@@ -49,7 +49,7 @@ soup = BeautifulSoup(baseURL.text, "html.parser")
 cats = soup.select(".common-menu li")
 
 prods_db = []
-today = datetime.now(timezone('Asia/Seoul')).strftime("%Y/%m/%d %H:00")
+today = datetime.now(timezone('Asia/Seoul')).strftime("%Y-%m-%d %H:00")
 
 for cat in cats:
     if cat.find("button"):
