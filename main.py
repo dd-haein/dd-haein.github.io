@@ -4,6 +4,8 @@ from datetime import datetime
 from pytz import timezone
 from playwright.sync_api import sync_playwright
 import pandas as pd
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 # p = sync_playwright().start()
 
 # broswer = p.chromium.launch()
@@ -93,6 +95,16 @@ for cat in cats:
 
 df = pd.DataFrame.from_records(prods_db)
 df.to_csv("./results/"+today+".csv", index = False)
+dfToJspn = df.to_json(orient='records')
+
+
+gc = gspread.service_account(filename="./github-with-gs-5b3c1d37f63d.json")
+sh = gc.open_by_key('1NHb0xsYMzGzFA42PptVhPAhvZVCkVm3sY5hnRt9x9JE')
+ws = sh.add_worksheet(title=today, rows=2101, cols=5)
+print(ws.get('A1'))
+
+ws.update([df.columns.values.tolist()] + df.values.tolist())
+
 
 # writer.writerow([f"{today} 올리브영 랭킹"])
 # writer.writerow(["랭킹 카테고리","순위", "브랜드명", "상품명", "링크", "카테고리"])
